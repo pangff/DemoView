@@ -4,17 +4,25 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.VelocityTracker;
 
 public class MainActivity extends Activity {
 
 	private MyView text;
+	
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.main);
 		text = (MyView) findViewById(R.id.text);
 		text.setBackgroundColor(Color.RED);
-		text.setText("");
+		String str = "";
+		for(int i=0;i<100;i++){
+			str+=(""+i);
+		}
+		text.setText(str);
 	}
 
 	@Override
