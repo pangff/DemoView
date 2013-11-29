@@ -2,7 +2,9 @@ package com.pangff.demoview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -25,16 +27,33 @@ public class MyView extends View {
 	private int maxWidth;
 	private int viewWidth;
 	int downX;//按下的x坐标
+	int textColor;
+	float textSize;
 
-	public MyView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		initLabelView();
-		this.flinger = new Flinger(context);
-		final ViewConfiguration configuration = ViewConfiguration.get(context);
-		this.minimumVelocity = configuration.getScaledMinimumFlingVelocity();
-		this.maximumVelocity = configuration.getScaledMaximumFlingVelocity();
+public MyView(Context context, AttributeSet attrs) {
+	super(context, attrs);
+	initLabelView();
+	this.flinger = new Flinger(context);
+	final ViewConfiguration configuration = ViewConfiguration.get(context);
+	this.minimumVelocity = configuration.getScaledMinimumFlingVelocity();
+	this.maximumVelocity = configuration.getScaledMaximumFlingVelocity();
 
+	/**
+	 * 获取自定义配置资源
+	 */
+	TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MyView);
+	textColor = a.getColor(R.styleable.MyView_textColor, Color.BLACK);
+	textSize = a.getDimension(R.styleable.MyView_textSize, 15);
+	
+	mTextPaint.setTextSize(textSize);
+	mTextPaint.setColor(textColor);
+	
+	//注意回首
+	if(a!=null){
+		a.recycle();
 	}
+	
+}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
