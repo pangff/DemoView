@@ -15,12 +15,19 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.pangff.demoview.MainActivity"
-            android:label="@string/app_name" >
+            android:label="View自定义专题" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.pangff.demoview.MyViewActivity"
+            android:label="自定义View" >
+        </activity>
+               <activity
+            android:name="com.pangff.demoview.MyViewGroupActivity"
+            android:label="自定义ViewGroup" >
         </activity>
     </application>
 

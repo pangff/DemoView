@@ -1,34 +1,42 @@
 package com.pangff.demoview;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.VelocityTracker;
-
+import android.view.View;
+/**
+ * @author pangff
+ * MainActivity
+ */
 public class MainActivity extends Activity {
 
-	private MyView text;
-	
-	
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		text = (MyView) findViewById(R.id.text);
-		text.setBackgroundColor(Color.RED);
-		String str = "";
-		for(int i=0;i<100;i++){
-			str+=(""+i);
-		}
-		text.setText(str);
-	}
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.main);
+  }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+  /**
+   * 按钮点击事件
+   * @param view
+   */
+  public void onViewClick(View view) {
+    String tag = (String) view.getTag();
+    if (tag.equals("view")) {
+      getNextPage(MyViewActivity.class);
+    }else if (tag.equals("viewgroup")) {
+      getNextPage(MyViewGroupActivity.class);
+    }
+  }
+  
+  /**
+   * 页面跳转
+   * @param classes
+   */
+  public void getNextPage(Class<?> classes){
+    Intent intent = new Intent();
+    intent.setClass(this, classes);
+    startActivity(intent);
+  }
 
 }
