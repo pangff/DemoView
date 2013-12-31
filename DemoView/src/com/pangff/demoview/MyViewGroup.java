@@ -128,24 +128,20 @@ public class MyViewGroup extends ViewGroup {
         final float dx = x - downX;
         final float xDiff = Math.abs(dx);
         final float yDiff = Math.abs(y - downY);
-        if (xDiff > mTouchSlop && xDiff > yDiff) {
+        if (xDiff > mTouchSlop && xDiff > yDiff && !isScrolling) {
+          if(dx<0){//view向左打开
+            if(currentView.getScrollX()==getMaxScrollX()){
+              resetView();
+              changeView();
+            }
+          }
+          if(dx>0){//view从左向右还原
+            if(currentView.getScrollX()==0){
+              changeView();
+              resetToLeftView();
+            }
+          }
           mIsBeingDragged = true;
-          if(dx>0){//view向左打开
-            if(currentView.getScrollX()==0){
-              changeView();
-            }
-            if(currentView.getScrollX()==getMaxScrollX()){
-              resetView();
-            }
-          }
-          if(dx<0){//view从左向右还原
-            if(currentView.getScrollX()==getMaxScrollX()){
-              changeView();
-            }
-            if(currentView.getScrollX()==0){
-              resetView();
-            }
-          }
         }else{
           mIsBeingDragged = false;
         }
@@ -156,8 +152,10 @@ public class MyViewGroup extends ViewGroup {
     return mIsBeingDragged;
   }
   
+  boolean isScrolling = false;
   @Override
   public void computeScroll() {
+    isScrolling = true;
     if (!mScroller.isFinished() && currentView != null) {
       if (mScroller.computeScrollOffset()) {
         int oldX = currentView.getScrollX();
@@ -169,37 +167,27 @@ public class MyViewGroup extends ViewGroup {
         }
         invalidate();
       }
-    }else if(mScroller.isFinished()){
-      if(currentView.getScrollX()==0){
-        Log.e("dddd", "向左滑动结束");
-      }
-      if(currentView.getScrollX()==getMaxScrollX()){
-        Log.e("dddd", "向右滑动结束");
-      }
-      currentView.bringToFront();
+    }else{
+      isScrolling = false;
     }
   }
   
   private void changeView(){
     if(currentView.equals(fistView)){
-      Log.e("dddddd", "底层替换上层");
       currentView = lastView;
       currentView.bringToFront();
-      fistView.scrollTo(0, this.getChildAt(0).getScrollY());
     }else{
-      Log.e("dddddd", "上层替换底层");
       currentView = fistView;
       currentView.bringToFront();
-      lastView.scrollTo(0, this.getChildAt(1).getScrollY());
     }
   }
   
   private void resetView(){
-    if(currentView.equals(fistView)){
-      lastView.scrollTo(0, lastView.getScrollY());
-    }else{
-      fistView.scrollTo(0, fistView.getScrollY());
-    }
+    currentView.scrollTo(0, currentView.getScrollY());
+  }
+  
+  private void resetToLeftView(){
+    currentView.scrollTo(getMaxScrollX(), currentView.getScrollY());
   }
   
   void smoothScrollTo(int dx) {
